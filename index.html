@@ -247,7 +247,7 @@
 
     <!-- SIDEBAR -->
     <nav class="sidebar">
-        <div class="sidebar-logo">⚡ <span>FBE-PMS-Monitor</span></div>
+        <div class="sidebar-logo">⚡ <span>Project_2026</span></div>
         <div class="sidebar-links">
             <a href="Impact_26.html" id="nav-impact" class="active">Impact 26</a>
         </div>
@@ -305,25 +305,41 @@
         function renderSummary() {
             const grid = document.getElementById('summaryGrid');
             
-            // Total Rows
+            const colorMap = {
+                'Total Occurrences': 'linear-gradient(135deg, #38bdf8, #818cf8)', // Cyan-Indigo
+                'Unique OLTs': 'linear-gradient(135deg, #c084fc, #f472b6)', // Purple-Pink
+                'Same Physical Route Uplink': 'linear-gradient(135deg, #fbbf24, #f97316)', // Yellow-Orange
+                'Outdoor OLT Battery low': 'linear-gradient(135deg, #34d399, #3b82f6)', // Emerald-Blue
+                'Simplex (No TT)': 'linear-gradient(135deg, #fb7185, #e11d48)', // Rose-Red
+                'Cascaded OLT': 'linear-gradient(135deg, #a78bfa, #6366f1)', // Violet-Indigo
+                'Simplex (By Design)': 'linear-gradient(135deg, #f87171, #dc2626)', // Red
+                'Simplex (Port capacity)': 'linear-gradient(135deg, #fdba74, #ea580c)' // Orange
+            };
+
+            function getGradient(title) {
+                return colorMap[title] || 'linear-gradient(135deg, #f8fafc, #94a3b8)';
+            }
+            
             let html = `
                 <div class="card">
                     <div class="card-title">Total Occurrences</div>
-                    <div class="card-value">${totalCount}</div>
+                    <div class="card-value" style="background: ${getGradient('Total Occurrences')}; -webkit-background-clip: text; -webkit-text-fill-color: transparent;">${totalCount}</div>
                 </div>
                 <div class="card">
                     <div class="card-title">Unique OLTs</div>
-                    <div class="card-value">${uniqueOlts}</div>
+                    <div class="card-value" style="background: ${getGradient('Unique OLTs')}; -webkit-background-clip: text; -webkit-text-fill-color: transparent;">${uniqueOlts}</div>
                 </div>
             `;
             
-            // Generate cards for top 4 categories
+            // Generate cards for categories
             const sortedCategories = Object.entries(summaryCounts).sort((a,b) => b[1] - a[1]);
-            for(let i=0; i<Math.min(6, sortedCategories.length); i++) {
+            for(let i=0; i<sortedCategories.length; i++) {
+                const title = sortedCategories[i][0];
+                const count = sortedCategories[i][1];
                 html += `
                     <div class="card">
-                        <div class="card-title">${sortedCategories[i][0]}</div>
-                        <div class="card-value">${sortedCategories[i][1]}</div>
+                        <div class="card-title">${title}</div>
+                        <div class="card-value" style="background: ${getGradient(title)}; -webkit-background-clip: text; -webkit-text-fill-color: transparent;">${count}</div>
                     </div>
                 `;
             }
